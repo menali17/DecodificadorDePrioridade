@@ -1,0 +1,68 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+-- Entidade do testbench (sem portas, pois é apenas para simulação)
+entity tb_PriorityEncoder4 is
+end entity;
+
+architecture Test of tb_PriorityEncoder4 is
+    -- Sinais internos para ligar ao componente sob teste (Unit Under Test - UUT)
+    signal p0, p1, p2, p3 : STD_LOGIC := '0';
+    signal x1, x0, int    : STD_LOGIC;
+begin
+    -- Instancia o componente codificador de prioridade (UUT)
+    UUT: entity work.PriorityEncoder4(Behavioral)
+        port map (
+            p0  => p0,
+            p1  => p1,
+            p2  => p2,
+            p3  => p3,
+            x1  => x1,
+            x0  => x0,
+            int => int
+        );
+
+    -- Processo de estímulo: gera as combinações de teste e mostra resultados
+    stim_proc: process
+    begin
+        -- Loop por todas as 16 combinações de 4 bits (0 a 15 em binário)
+        for i in 0 to 15 loop
+            -- Define p0, p1, p2, p3 de acordo com os bits de i
+            if (i >= 8) then 
+                p0 <= '1';                  -- bit 3 de i (8)
+            else 
+                p0 <= '0';
+            end if;
+            if ((i mod 8) >= 4) then 
+                p1 <= '1';                  -- bit 2 de i (4)
+            else 
+                p1 <= '0';
+            end if;
+            if ((i mod 4) >= 2) then 
+                p2 <= '1';                  -- bit 1 de i (2)
+            else 
+                p2 <= '0';
+            end if;
+            if ((i mod 2) = 1) then 
+                p3 <= '1';                  -- bit 0 de i (1)
+            else 
+                p3 <= '0';
+            end if;
+
+            wait for 10 ns;  -- Aguarda 10 ns para as saídas estabilizarem
+
+            -- Imprime os valores atuais das entradas e saídas (usa VHDL-2008 'image')
+            report "Entradas: p0=" & std_logic'image(p0) &
+                   ", p1=" & std_logic'image(p1) &
+                   ", p2=" & std_logic'image(p2) &
+                   ", p3=" & std_logic'image(p3) &
+                   " | Saídas: x1=" & std_logic'image(x1) &
+                   ", x0=" & std_logic'image(x0) &
+                   ", int=" & std_logic'image(int)
+                   severity note;
+        end loop;
+
+        wait;  -- Termina a simulação após testar todas as combinações
+    end process;
+end architecture;
