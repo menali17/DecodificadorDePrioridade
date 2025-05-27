@@ -1,0 +1,50 @@
+-- Codificador de prioridade 4-para-2 com sinal de interrupção
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Entidade do codificador de prioridade
+entity PriorityEncoder4 is
+    Port (
+        p0, p1, p2, p3 : in  STD_LOGIC;   -- Entradas (p0 = mais alta prioridade)
+        x1, x0         : out STD_LOGIC;   -- Saídas codificadas (2 bits)
+        int            : out STD_LOGIC    -- Sinal de interrupção (1 se alguma entrada = 1)
+    );
+end PriorityEncoder4;
+
+-- Arquitetura comportamental do codificador de prioridade
+architecture Behavioral of PriorityEncoder4 is
+begin
+    -- Processo combinacional que define as saídas com base nas entradas
+    process(p0, p1, p2, p3) is
+    begin
+        -- Define o sinal de interrupção: '1' se qualquer entrada estiver em nível alto, senão '0'
+        if (p0 = '1' or p1 = '1' or p2 = '1' or p3 = '1') then
+            int <= '1';
+        else
+            int <= '0';
+        end if;
+
+        -- Codificação de prioridade para x1 e x0:
+        if (p0 = '1') then
+            -- p0 ativo (mais alta prioridade) -> código "00"
+            x1 <= '0';
+            x0 <= '0';
+        elsif (p1 = '1') then
+            -- p1 ativo (p0 inativo) -> código "01"
+            x1 <= '0';
+            x0 <= '1';
+        elsif (p2 = '1') then
+            -- p2 ativo (p0 e p1 inativos) -> código "10"
+            x1 <= '1';
+            x0 <= '0';
+        elsif (p3 = '1') then
+            -- p3 ativo (p0, p1 e p2 inativos) -> código "11"
+            x1 <= '1';
+            x0 <= '1';
+        else
+            -- Nenhuma entrada ativa -> código "00" por padrão
+            x1 <= '0';
+            x0 <= '0';
+        end if;
+    end process;
+end Behavioral;
