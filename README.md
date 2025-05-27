@@ -34,7 +34,7 @@ Este projeto implementa um codificador de prioridade 4x2 utilizando a linguagem 
 - Se múltiplas entradas estiverem em nível alto, a saída corresponde à entrada com **maior prioridade** (`p0 > p1 > p2 > p3`).
 - O sinal `int` fica em nível alto (`1`) quando qualquer entrada está ativa, e em nível baixo (`0`) quando todas estão desativadas.
 
-- ## Como Usar no Quartus
+ ## Como Usar no Quartus
 
 1. Abra o **Quartus Prime**.
 2. Crie um novo projeto (**File → New Project Wizard**).
