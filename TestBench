@@ -1,48 +1,47 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL; -- Importante para conversões
+use IEEE.NUMERIC_STD.ALL;
 
-entity Vhdl2 is
+entity tb_codificador_prioridade is
 end entity;
 
-architecture Testbench of Vhdl2 is
-    -- Sinais para interligar com o componente
-    signal p0, p1, p2, p3 : STD_LOGIC := '0';
-    signal x1, x0, int    : STD_LOGIC;
+architecture Testbench of tb_codificador_prioridade is
+
+    -- Sinais de teste
+    signal MNS1, MNS2, MNS3, MNS4 : STD_LOGIC := '0';
+    signal TLD1, TLD2, TLD3 : STD_LOGIC;
+
 begin
 
-    -- Instância do codificador de prioridade
-    DUT: entity work.decodificadordeprioridade(Behavioral)
+    -- Instância do DUT (Device Under Test)
+    DUT: entity work.codificador_prioridade(Behavioral)
         port map (
-            p0  => p0,
-            p1  => p1,
-            p2  => p2,
-            p3  => p3,
-            x1  => x1,
-            x0  => x0,
-            int => int
+            MNS1 => MNS1,
+            MNS2 => MNS2,
+            MNS3 => MNS3,
+            MNS4 => MNS4,
+            TLD1 => TLD1,
+            TLD2 => TLD2,
+            TLD3 => TLD3
         );
 
     -- Processo de estímulo
     stimulus: process
-        variable bin : std_logic_vector(3 downto 0);
+        variable entrada : std_logic_vector(3 downto 0);
     begin
-        -- Varre todas as combinações possíveis de entradas (de 0000 até 1111)
         for i in 0 to 15 loop
+            entrada := std_logic_vector(to_unsigned(i, 4));
 
-            -- Converte o inteiro i para vetor de 4 bits
-            bin := std_logic_vector(to_unsigned(i, 4));
-
-            -- Atribui os bits aos sinais
-            p0 <= bin(3); -- bit mais significativo
-            p1 <= bin(2);
-            p2 <= bin(1);
-            p3 <= bin(0); -- bit menos significativo
+            -- Distribuindo os bits nas entradas
+            MNS1 <= entrada(3); -- bit mais significativo
+            MNS2 <= entrada(2);
+            MNS3 <= entrada(1);
+            MNS4 <= entrada(0); -- bit menos significativo
 
             wait for 10 ns;
         end loop;
 
         wait;
     end process;
-end architecture;
 
+end architecture;
