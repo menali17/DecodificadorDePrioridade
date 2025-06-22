@@ -1,0 +1,20 @@
+
+# Mapeamento de Entradas (Botões da AX301 - Lógica Invertida)
+set_location_assignment PIN_M15 -to MNS1  # KEY1
+set_location_assignment PIN_M16 -to MNS2  # KEY2
+set_location_assignment PIN_E16 -to MNS3  # KEY3
+set_location_assignment PIN_N13 -to MNS4  # RESET
+
+# Mapeamento de Saídas (LEDs da AX301)
+set_location_assignment PIN_E10 -to TLD1  # LED0
+set_location_assignment PIN_F9  -to TLD2  # LED1
+set_location_assignment PIN_C9  -to TLD3  # LED2
+
+# Padrão Elétrico (IO Standard) para todos os pinos
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to MNS1
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to MNS2
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to MNS3
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to MNS4
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to TLD1
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to TLD2
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to TLD3
