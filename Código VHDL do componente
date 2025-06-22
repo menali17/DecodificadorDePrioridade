@@ -1,46 +1,46 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity PriorityEncoder4 is
+entity codificador_prioridade is
     Port (
-        p0  : in  STD_LOGIC;   -- Maior prioridade
-        p1  : in  STD_LOGIC;
-        p2  : in  STD_LOGIC;
-        p3  : in  STD_LOGIC;   -- Menor prioridade
-        x1  : out STD_LOGIC;   -- Saída codificada (bit mais significativo)
-        x0  : out STD_LOGIC;   -- Saída codificada (bit menos significativo)
-        int : out STD_LOGIC    -- Sinal de interrupção (1 se qualquer entrada está ativa)
-    );
-end PriorityEncoder4;
+        MNS1 : in  STD_LOGIC;  -- Maior prioridade (ativo em '0')
+        MNS2 : in  STD_LOGIC;
+        MNS3 : in  STD_LOGIC;
+        MNS4 : in  STD_LOGIC;  -- Menor prioridade
 
-architecture Behavioral of PriorityEncoder4 is
+        TLD1 : out STD_LOGIC;  -- Bit mais significativo da saída codificada
+        TLD2 : out STD_LOGIC;  -- Bit menos significativo da saída codificada
+        TLD3 : out STD_LOGIC   -- Sinal de interrupção (1 se alguma entrada estiver ativa)
+    );
+end codificador_prioridade;
+
+architecture Behavioral of codificador_prioridade is
 begin
-    process(p0, p1, p2, p3)
+    process(MNS1, MNS2, MNS3, MNS4)
     begin
-        -- Sinal de interrupção
-        if (p0 = '1' or p1 = '1' or p2 = '1' or p3 = '1') then
-            int <= '1';
+        -- Sinal de interrupção (ativo se qualquer entrada for '0')
+        if (MNS1 = '0' or MNS2 = '0' or MNS3 = '0' or MNS4 = '0') then
+            TLD3 <= '1';
         else
-            int <= '0';
+            TLD3 <= '0';
         end if;
 
         -- Codificação de prioridade
-        if (p0 = '1') then
-            x1 <= '0';
-            x0 <= '0';
-        elsif (p1 = '1') then
-            x1 <= '0';
-            x0 <= '1';
-        elsif (p2 = '1') then
-            x1 <= '1';
-            x0 <= '0';
-        elsif (p3 = '1') then
-            x1 <= '1';
-            x0 <= '1';
+        if (MNS1 = '0') then
+            TLD1 <= '0';
+            TLD2 <= '0';
+        elsif (MNS2 = '0') then
+            TLD1 <= '0';
+            TLD2 <= '1';
+        elsif (MNS3 = '0') then
+            TLD1 <= '1';
+            TLD2 <= '0';
+        elsif (MNS4 = '0') then
+            TLD1 <= '1';
+            TLD2 <= '1';
         else
-            x1 <= '0';
-            x0 <= '0';
+            TLD1 <= '1';
+            TLD2 <= '1';
         end if;
     end process;
 end Behavioral;
-
